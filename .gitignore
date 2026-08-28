@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environment variables & secrets
+.env
+.env.local
+*.env
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and databases
+*.log
+backend/logs/*
+!backend/logs/.gitkeep
+
+# Data directories (Uploads & Vector Store local cache)
+backend/data/uploads/*
+!backend/data/uploads/.gitkeep
+backend/data/vector_store/*
+!backend/data/vector_store/.gitkeep
+backend/chat_store/*
+!backend/chat_store/.gitkeep
+backend/app/downloads/*
+!backend/app/downloads/.gitkeep
+
+# IDE configuration
+.vscode/
+.idea/
+*.swp
+*.swo

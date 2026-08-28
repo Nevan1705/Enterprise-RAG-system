@@ -1,0 +1,295 @@
+{
+  "_type": "Project",
+  "_id": "AAAAAAFF+h6K6n5nn60=",
+  "name": "Enterprise_RAG_System_v3",
+  "ownedElements": [
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAAAFF+qBWK6M3Z8Y=",
+      "_parent": {
+        "$ref": "AAAAAAFF+h6K6n5nn60="
+      },
+      "name": "Use Case Model",
+      "ownedElements": [
+        {
+          "_type": "UMLUseCaseDiagram",
+          "_id": "AAAAAAGGUseCasesDiagram01",
+          "_parent": {
+            "$ref": "AAAAAAFF+qBWK6M3Z8Y="
+          },
+          "name": "Enterprise RAG System Use Cases"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACTOR_QA",
+          "name": "QA Engineer / Tester"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACTOR_DEV",
+          "name": "Software Developer"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACTOR_USER",
+          "name": "Business / Enterprise User"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACTOR_ADMIN",
+          "name": "System Administrator"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_UPLOAD",
+          "name": "Upload & Ingest Documents (PDF/DOCX)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_ASYNC_EMBED",
+          "name": "Async Document Processing & Embedding (Celery/Redis)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_SEMANTIC_QUERY",
+          "name": "Perform Semantic & Hybrid Querying"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_GEN_TESTCASES",
+          "name": "Generate Multi-Batch QA Test Cases"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_EXPORT_EXCEL",
+          "name": "Export Test Cases to Formatted Excel (.xlsx)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_EXPORT_CHAT",
+          "name": "Export Chat Transcripts (JSON / TXT)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_DELETE_REBUILD",
+          "name": "Delete Document & Atomic FAISS Index Rebuild"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_HEALTH_MONITOR",
+          "name": "Monitor System Health & Vector Store Observability"
+        }
+      ]
+    },
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAAAFF+qBtyKM79qY=",
+      "_parent": {
+        "$ref": "AAAAAAFF+h6K6n5nn60="
+      },
+      "name": "Class Model",
+      "ownedElements": [
+        {
+          "_type": "UMLClassDiagram",
+          "_id": "AAAAAAGGClassDiagram01",
+          "_parent": {
+            "$ref": "AAAAAAFF+qBtyKM79qY="
+          },
+          "name": "Enterprise RAG System Architecture Class Diagram"
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_SETTINGS",
+          "name": "Settings",
+          "attributes": [
+            {
+              "_type": "UMLAttribute",
+              "name": "GROQ_API_KEY: str"
+            },
+            {
+              "_type": "UMLAttribute",
+              "name": "GROQ_MODEL: str = 'openai/gpt-oss-120b'"
+            },
+            {
+              "_type": "UMLAttribute",
+              "name": "EMBEDDING_MODEL: str = 'sentence-transformers/all-MiniLM-L6-v2'"
+            },
+            {
+              "_type": "UMLAttribute",
+              "name": "REDIS_URL: str"
+            },
+            {
+              "_type": "UMLAttribute",
+              "name": "CHUNK_SIZE: int = 500"
+            },
+            {
+              "_type": "UMLAttribute",
+              "name": "TOP_K: int = 5"
+            }
+          ]
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_VECTORSTORE",
+          "name": "VectorStoreService",
+          "attributes": [
+            {
+              "_type": "UMLAttribute",
+              "name": "_model: SentenceTransformer"
+            },
+            {
+              "_type": "UMLAttribute",
+              "name": "_doc_ids_indexed: Set[str]"
+            },
+            {
+              "_type": "UMLAttribute",
+              "name": "_documents_store: List[Tuple[ndarray, Document]]"
+            }
+          ],
+          "operations": [
+            {
+              "_type": "UMLOperation",
+              "name": "embed_texts(texts: List[str]): ndarray"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "embed_query(text: str): ndarray"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "add_documents(embeddings, docs, doc_id, file_hash, source): int"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "similarity_search(query_vec, k, doc_id_filter, similarity_threshold): List[Document]"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "delete_document(doc_id: str): bool"
+            }
+          ]
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_RETRIEVER",
+          "name": "RetrieverService",
+          "operations": [
+            {
+              "_type": "UMLOperation",
+              "name": "retrieve_and_build_context(question, k, doc_id_filter, isolate_top_doc, similarity_threshold): Tuple[List[Doc], str]"
+            }
+          ]
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_LLM",
+          "name": "LLMService",
+          "attributes": [
+            {
+              "_type": "UMLAttribute",
+              "name": "SYSTEM_PROMPT: str"
+            }
+          ],
+          "operations": [
+            {
+              "_type": "UMLOperation",
+              "name": "generate(context: str, question: str, system_prompt, max_tokens): LLMResult"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "_call_groq(context, question, ...): str"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "_call_llamaindex(context, question, ...): str"
+            }
+          ]
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_TESTCASE",
+          "name": "TestCaseService",
+          "attributes": [
+            {
+              "_type": "UMLAttribute",
+              "name": "_CATEGORY_BATCHES: List[str]"
+            },
+            {
+              "_type": "UMLAttribute",
+              "name": "TESTCASE_SYSTEM_PROMPT: str"
+            }
+          ],
+          "operations": [
+            {
+              "_type": "UMLOperation",
+              "name": "is_testcase_request(question: str): bool"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "generate_testcases_json(context: str, question: str): Tuple[List[dict], str]"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "_generate_single_batch(context, question, category): List[dict]"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "_parse_and_validate_testcases(raw_text): List[dict]"
+            }
+          ]
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_EXCEL_EXPORT",
+          "name": "ExcelExportService",
+          "operations": [
+            {
+              "_type": "UMLOperation",
+              "name": "export_testcases_to_excel(testcases: List[dict]): str"
+            }
+          ]
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_CHAT_STORE",
+          "name": "ChatStoreService",
+          "attributes": [
+            {
+              "_type": "UMLAttribute",
+              "name": "_sessions: Dict[str, dict]"
+            }
+          ],
+          "operations": [
+            {
+              "_type": "UMLOperation",
+              "name": "get_or_create(session_id: str): dict"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "append(session_id, role, content, sources, doc_ids, chunks_used, provider)"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "export_json(session_id: str): str"
+            },
+            {
+              "_type": "UMLOperation",
+              "name": "export_txt(session_id: str): str"
+            }
+          ]
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_CELERY_TASK",
+          "name": "CeleryWorkerTasks",
+          "operations": [
+            {
+              "_type": "UMLOperation",
+              "name": "process_document(file_path, filename, doc_id, file_hash): dict"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
