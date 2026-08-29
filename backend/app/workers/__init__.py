@@ -7,3 +7,4 @@ Date        : 2026-08-28
 Description : Celery asynchronous task workers package.
 ================================================================================
 """
+import app.core.ssl_patch  # noqa: F401

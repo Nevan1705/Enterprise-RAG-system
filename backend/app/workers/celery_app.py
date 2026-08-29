@@ -9,6 +9,7 @@ Description : Distributed Task Queue Worker Configuration (Celery + Redis).
               retry intervals, late acknowledgements, and extended result tracking.
 ================================================================================
 """
+import app.core.ssl_patch  # noqa: F401 - Apply SSL fix for worker model downloads
 from celery import Celery
 from app.core.config import settings
 
