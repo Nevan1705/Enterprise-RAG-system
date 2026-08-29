@@ -20,6 +20,7 @@ import re
 from typing import List
 from pydantic import ValidationError
 
+import app.core.ssl_patch  # noqa: F401 - Apply SSL fix for Groq and LlamaIndex
 from app.models.schemas import TestCaseItem
 from app.services.llm import LLMService
 from app.core.logger import setup_logger

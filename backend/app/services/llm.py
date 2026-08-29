@@ -16,6 +16,7 @@ import time
 from dataclasses import dataclass
 from typing import Optional
 
+import app.core.ssl_patch  # noqa: F401 - Apply SSL fix for Groq and LlamaIndex
 from app.core.config import settings
 from app.core.logger import setup_logger
 
