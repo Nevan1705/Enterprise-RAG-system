@@ -16,6 +16,7 @@ Description : Background Celery Tasks for asynchronous document ingestion.
 """
 import os
 
+import app.core.ssl_patch  # noqa: F401 - Apply SSL fix for model downloads on Windows
 from app.workers.celery_app import celery_app
 from app.core.logger import setup_logger
 from app.services.document_loader import extract_text

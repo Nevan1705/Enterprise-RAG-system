@@ -14,6 +14,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import app.core.ssl_patch  # noqa: F401 - Apply SSL fix for model downloads on Windows
 from app.core.logger import setup_logger
 from app.routers import upload, query, status, documents, health
 

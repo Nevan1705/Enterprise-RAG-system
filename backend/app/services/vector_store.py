@@ -23,6 +23,7 @@ import numpy as np
 from langchain_core.documents import Document
 from sentence_transformers import SentenceTransformer
 
+import app.core.ssl_patch  # noqa: F401 - Apply SSL fix for model downloads on Windows
 from app.core.config import settings
 from app.core.logger import setup_logger
 
